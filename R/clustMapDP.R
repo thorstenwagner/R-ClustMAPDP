@@ -101,7 +101,6 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
    dE <- Eold - Enew;
    iter <- iter +1;
    E <- c(E,Enew);
-   print(dE)
  }
 
  # Compute cluster centroids
