@@ -4,8 +4,8 @@ library(matrixStats);
 set.seed(123)
 repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
-D <- 3; # Data dimensionality
-K <- 4; # Number of clusters
+D <- 2; # Data dimensionality
+K <- 3; # Number of clusters
 
 #Generate random cluster locations and covariance matrices
 manyZeros <- rep(0,D*D*K);
@@ -43,7 +43,15 @@ m0 <- rowMeans(X);                     # Normal-Wishart prior mean
 a0 <- 10;                            # Normal-Wishart prior scale
 c0 <- 10/N;                          # Normal-Wishart prior degrees of freedom
 B0 <- diag(1./(0.05*rowVars(X)));    # Normal-Wishart prior precision
+start.time <- Sys.time()
+Rprof(tmp <- tempfile())
 r <- clustMapDP(X,N0,m0,a0,c0,B0);
+Rprof()
+summaryRprof(tmp)
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+print(time.taken)
+
 par(mfrow=c(1,2));
 plot(X[1,],X[2,],col=r$z, main = "MAP-DP")
 km <- kmeans(x=t(X),c=r$K,iter.max = 20)

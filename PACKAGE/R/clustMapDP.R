@@ -72,7 +72,7 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
 
      # Computer MAP Assignment
      v = dk-log(Nki);
-     z[i] <- which.min(dk-log(Nki));
+     z[i] <- which.min(v);
      dik[i] <- v[z[i]];
 
      #print(z[i])
@@ -126,7 +126,7 @@ stnll <- function(x,m,a,c,B,D) {
   return(as.numeric(nl))
 }
 
-repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
