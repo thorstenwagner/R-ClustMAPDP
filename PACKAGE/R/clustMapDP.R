@@ -126,7 +126,11 @@ stnll <- function(x,m,a,c,B,D) {
   return(as.numeric(nl))
 }
 
-#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+#' Replicates the behaviour of the repmat function of MATLAB
+#' @param a The matrix to copy
+#' @param n The n value for tiling
+#' @param m The m value for the tiling
+repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
