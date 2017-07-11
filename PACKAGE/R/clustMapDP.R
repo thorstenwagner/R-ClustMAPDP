@@ -1,4 +1,5 @@
 library(matrixStats);
+library(lfda);
 #' MAP-DP Clustering
 #'
 #'It implements the algorithm descriped by
@@ -130,7 +131,7 @@ stnll <- function(x,m,a,c,B,D) {
 #' @param a The matrix to copy
 #' @param n The n value for tiling
 #' @param m The m value for the tiling
-repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
