@@ -2,7 +2,7 @@ library(ClustMAPDP);
 library(expm);
 library(matrixStats);
 set.seed(123)
-repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 D <- 2; # Data dimensionality
 K <- 5; # Number of clusters
@@ -54,7 +54,7 @@ print(time.taken)
 
 par(mfrow=c(1,3));
 plot(X[1,],X[2,],col=Z, main = "Input")
-plot(X[1,],X[2,],col=r$z, main = "MAP-DP")
+plot(X[1,],X[2,],col=r$z, main = paste("MAP-DP (",r$K,")"))
 km <- kmeans(x=t(X),c=r$K,iter.max = 20)
 plot(X[1,],X[2,],col=km$cluster, main = "kMeans")
 
