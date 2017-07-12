@@ -5,4 +5,6 @@ Raykov YP, Boukouvalas A, Baig F, Little MA (2016) What to Do When K-Means Clust
 
 ## Installation
 Download the latest release and use the following command in R:
+```
 install.packages("/path/to/ClustMAPDP_X.tar.gz")
+```
