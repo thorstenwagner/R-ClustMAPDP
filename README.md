@@ -8,3 +8,6 @@ Download the latest release and use the following command in R:
 ```
 install.packages("/path/to/ClustMAPDP_X.tar.gz")
 ```
+
+## Example
+![alt text](https://github.com/thorstenwagner/R-ClustMAPDP/blob/master/README_DATA/example.png)
