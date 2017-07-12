@@ -115,22 +115,25 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
 }
 
 #' Compute Stundent-t log likeligood
-stnll <- function(x,m,a,c,B,D) {
-  mu <- m;
+stnll <- function(x,mu,a,c,B,D) {
   nu <- a-D+1;
   Lambda <- c*nu/(c+1)*B;
-  x <- as.matrix(x);#matrix(x,nrow = 2,ncol = 1)
-  nl <- (nu+D)/2*log(1+t(x-mu)%*%Lambda%*%(x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
+  nl <- (nu+D)/2*log(1+t(x-mu)%*%crossprod(Lambda,x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
 
-  return(as.numeric(nl))
+  return(nl)
 }
 
 #' Replicates the behaviour of the repmat function of MATLAB
 #' @param a The matrix to copy
 #' @param n The n value for tiling
 #' @param m The m value for the tiling
-repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
-
+#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+repmat = function(X,m,n){
+  ##R equivalent of repmat (matlab)
+  mx = dim(X)[1]
+  nx = dim(X)[2]
+  matrix(t(matrix(X,mx,nx*n)),mx*m,nx*n,byrow=T)
+}
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
   xmki <- 0;
@@ -139,16 +142,21 @@ nwupd <- function(Nki,xki,m0,a0,c0,B0) {
   }else{
     xmki <- rowMeans(xki);
   }
-  if(is.matrix(xki)==FALSE){
-    xki <- as.matrix(xki);
-  }
-  xmcki <- sweep(xki,1,repmat(xmki,1,Nki),"-"); #xki-repmat(xmki,1,Nki);
 
-  Ski <- xmcki%*%t(xmcki);
+  xmcki <-0;
+  b = repmat(xmki,1,Nki);
+  if(dim(b)[1]==1 && dim(b)[2]==1){
+    xmcki <-  xki- b[1,1];
+  }
+  else{
+    xmcki <-  xki-b; #sweep(xki,1,repmat(xmki,1,Nki),"-");
+  }
+
+  Ski <- tcrossprod(xmcki)
   cki <- c0+Nki;
   mki <- (c0*m0+Nki*xmki)/cki;
-  xm0cki <- xmki-m0;
-  Bki <- solve(solve(B0)+Ski+c0*Nki/cki*xm0cki%*%t(xm0cki));
+
+  Bki <- solve(solve(B0)+Ski+c0*Nki/cki*(xmki-m0)%*%t(xmki-m0));
   aki <- a0+Nki;
 
   resultList <- list("mki"=mki,"aki"=aki,"cki"=cki,"Bki"=Bki);
