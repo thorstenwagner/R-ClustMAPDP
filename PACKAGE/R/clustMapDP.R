@@ -15,6 +15,7 @@ stnll <- function(x,mu,a,c,B,D) {
 #' @param a The matrix to copy
 #' @param n The n value for tiling
 #' @param m The m value for the tiling
+#' @export
 #repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
