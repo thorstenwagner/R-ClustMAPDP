@@ -4,7 +4,7 @@
 \alias{stnll}
 \title{Compute Stundent-t log likeligood}
 \usage{
-stnll(x, m, a, c, B, D)
+stnll(x, mu, a, c, B, D)
 }
 \description{
 Compute Stundent-t log likeligood
