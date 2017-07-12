@@ -34,3 +34,5 @@ ClustMAPDP.Rcheck/ClustMAPDP/R/ClustMAPDP
 ClustMAPDP.Rcheck/ClustMAPDP/R/ClustMAPDP.rdb
 ClustMAPDP.Rcheck/ClustMAPDP/R/ClustMAPDP.rdx
 PACKAGE/Rprof.out
+.Rbuildignore
+ClustMAPDP_1.0.0-1.tar.gz
