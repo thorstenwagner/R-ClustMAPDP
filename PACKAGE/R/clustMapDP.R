@@ -16,12 +16,8 @@ stnll <- function(x,mu,a,c,B,D) {
 #' @param n The n value for tiling
 #' @param m The m value for the tiling
 #repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
-repmat = function(X,m,n){
-  ##R equivalent of repmat (matlab)
-  mx = dim(X)[1]
-  nx = dim(X)[2]
-  matrix(t(matrix(X,mx,nx*n)),mx*m,nx*n,byrow=T)
-}
+repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
   xmki <- 0;
