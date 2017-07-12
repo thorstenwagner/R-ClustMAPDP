@@ -5,7 +5,7 @@ set.seed(123)
 repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 D <- 2; # Data dimensionality
-K <- 3; # Number of clusters
+K <- 5; # Number of clusters
 
 #Generate random cluster locations and covariance matrices
 manyZeros <- rep(0,D*D*K);
@@ -52,7 +52,8 @@ end.time <- Sys.time()
 time.taken <- end.time - start.time
 print(time.taken)
 
-par(mfrow=c(1,2));
+par(mfrow=c(1,3));
+plot(X[1,],X[2,],col=Z, main = "Input")
 plot(X[1,],X[2,],col=r$z, main = "MAP-DP")
 km <- kmeans(x=t(X),c=r$K,iter.max = 20)
 plot(X[1,],X[2,],col=km$cluster, main = "kMeans")

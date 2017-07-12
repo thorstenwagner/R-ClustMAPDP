@@ -1,4 +1,56 @@
 library(matrixStats);
+library(compiler)
+enableJIT(3)
+
+#' Compute Stundent-t log likeligood
+stnll <- function(x,mu,a,c,B,D) {
+  nu <- a-D+1;
+  Lambda <- c*nu/(c+1)*B;
+  nl <- (nu+D)/2*log(1+t(x-mu)%*%crossprod(Lambda,x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
+
+  return(nl)
+}
+
+#' Replicates the behaviour of the repmat function of MATLAB
+#' @param a The matrix to copy
+#' @param n The n value for tiling
+#' @param m The m value for the tiling
+#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
+repmat = function(X,m,n){
+  ##R equivalent of repmat (matlab)
+  mx = dim(X)[1]
+  nx = dim(X)[2]
+  matrix(t(matrix(X,mx,nx*n)),mx*m,nx*n,byrow=T)
+}
+#' Update Normal-Wishart hyper parameters
+nwupd <- function(Nki,xki,m0,a0,c0,B0) {
+  xmki <- 0;
+  if(!is.matrix(xki)){
+    xmki <- mean(xki);
+  }else{
+    xmki <- rowMeans(xki);
+  }
+
+  xmcki <-0;
+  b = repmat(xmki,1,Nki);
+  if(dim(b)[1]==1 && dim(b)[2]==1){
+    xmcki <-  xki- b[1,1];
+  }
+  else{
+    xmcki <-  xki-b; #sweep(xki,1,repmat(xmki,1,Nki),"-");
+  }
+
+  Ski <- tcrossprod(xmcki)
+  cki <- c0+Nki;
+  mki <- (c0*m0+Nki*xmki)/cki;
+
+  Bki <- solve(solve(B0)+Ski+c0*Nki/cki*(xmki-m0)%*%t(xmki-m0));
+  aki <- a0+Nki;
+
+  resultList <- list("mki"=mki,"aki"=aki,"cki"=cki,"Bki"=Bki);
+  return(resultList);
+}
+
 #' MAP-DP Clustering
 #'
 #'It implements the algorithm descriped by
@@ -114,51 +166,6 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
  return(resultList);
 }
 
-#' Compute Stundent-t log likeligood
-stnll <- function(x,mu,a,c,B,D) {
-  nu <- a-D+1;
-  Lambda <- c*nu/(c+1)*B;
-  nl <- (nu+D)/2*log(1+t(x-mu)%*%crossprod(Lambda,x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
 
-  return(nl)
-}
 
-#' Replicates the behaviour of the repmat function of MATLAB
-#' @param a The matrix to copy
-#' @param n The n value for tiling
-#' @param m The m value for the tiling
-#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
-repmat = function(X,m,n){
-  ##R equivalent of repmat (matlab)
-  mx = dim(X)[1]
-  nx = dim(X)[2]
-  matrix(t(matrix(X,mx,nx*n)),mx*m,nx*n,byrow=T)
-}
-#' Update Normal-Wishart hyper parameters
-nwupd <- function(Nki,xki,m0,a0,c0,B0) {
-  xmki <- 0;
-  if(!is.matrix(xki)){
-    xmki <- mean(xki);
-  }else{
-    xmki <- rowMeans(xki);
-  }
 
-  xmcki <-0;
-  b = repmat(xmki,1,Nki);
-  if(dim(b)[1]==1 && dim(b)[2]==1){
-    xmcki <-  xki- b[1,1];
-  }
-  else{
-    xmcki <-  xki-b; #sweep(xki,1,repmat(xmki,1,Nki),"-");
-  }
-
-  Ski <- tcrossprod(xmcki)
-  cki <- c0+Nki;
-  mki <- (c0*m0+Nki*xmki)/cki;
-
-  Bki <- solve(solve(B0)+Ski+c0*Nki/cki*(xmki-m0)%*%t(xmki-m0));
-  aki <- a0+Nki;
-
-  resultList <- list("mki"=mki,"aki"=aki,"cki"=cki,"Bki"=Bki);
-  return(resultList);
-}
