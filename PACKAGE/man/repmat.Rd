@@ -4,14 +4,14 @@
 \alias{repmat}
 \title{Replicates the behaviour of the repmat function of MATLAB}
 \usage{
-repmat(X, m, n)
+repmat(a, n, m)
 }
 \arguments{
-\item{m}{The m value for the tiling}
+\item{a}{The matrix to copy}
 
 \item{n}{The n value for tiling}
 
-\item{a}{The matrix to copy}
+\item{m}{The m value for the tiling}
 }
 \description{
 Replicates the behaviour of the repmat function of MATLAB
