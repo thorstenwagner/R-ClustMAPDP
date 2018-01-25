@@ -10,4 +10,7 @@ install.packages("/path/to/ClustMAPDP_X.tar.gz")
 ```
 
 ## Example
+For an example how to use this package please see https://github.com/thorstenwagner/R-ClustMAPDP/blob/master/Example/ClustMapExample.R 
+
+This should be the result:
 ![alt text](https://github.com/thorstenwagner/R-ClustMAPDP/blob/master/README_DATA/example.png)
