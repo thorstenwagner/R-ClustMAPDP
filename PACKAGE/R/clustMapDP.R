@@ -6,18 +6,10 @@ enableJIT(3)
 stnll <- function(x,mu,a,c,B,D) {
   nu <- a-D+1;
   Lambda <- c*nu/(c+1)*B;
-  nl <- (nu+D)/2*log(1+t(x-mu)%*%crossprod(Lambda,x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
+  nl <- (nu+D)/2*log(1+t(x-mu)%*%Lambda%*%(x-mu)/nu)-0.5*log(det(Lambda))+lgamma(nu/2)-lgamma((nu+D)/2)+D/2*log(nu*pi);
 
   return(nl)
 }
-
-#' Replicates the behaviour of the repmat function of MATLAB
-#' @param a The matrix to copy
-#' @param n The n value for tiling
-#' @param m The m value for the tiling
-#' @export
-#repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
-repmat <- function(a,n,m) {kronecker(matrix(1,n,m),a)}
 
 #' Update Normal-Wishart hyper parameters
 nwupd <- function(Nki,xki,m0,a0,c0,B0) {
@@ -29,12 +21,12 @@ nwupd <- function(Nki,xki,m0,a0,c0,B0) {
   }
 
   xmcki <-0;
-  b = repmat(xmki,1,Nki);
+  b = kronecker(matrix(1,1,Nki),xmki);
   if(dim(b)[1]==1 && dim(b)[2]==1){
     xmcki <-  xki- b[1,1];
   }
   else{
-    xmcki <-  xki-b; #sweep(xki,1,repmat(xmki,1,Nki),"-");
+    xmcki <-  xki-b;
   }
 
   Ski <- tcrossprod(xmcki)
@@ -76,18 +68,14 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
  E <- c();
 
  while (abs(dE) > epsilon) {
-
    Eold <- Enew;
    dik <- matrix(Inf,N,1);
 
    for(i in 1:N){
-
      dk <- matrix(Inf,K+1,1);
-
      Nki <- matrix(Inf,K+1,1);
 
      for(k in 1:K){
-
        zki <- (z==k);
        zki[i] <- FALSE;
        Nki[k] <- sum(zki);
@@ -125,7 +113,6 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
      dik[i] <- v[z[i]];
 
      # Create new cluster if required
-
      if(z[i] == (K+1)){
        K <- K+1;
      }
@@ -155,7 +142,6 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
  mu <- matrix(NaN,D,K);
  for(k in 1:K){
    xk <- X[,z==k];
-
    mu[,k] <- rowMeans(xk);
  }
 
