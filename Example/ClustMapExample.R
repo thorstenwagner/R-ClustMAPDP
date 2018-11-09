@@ -32,7 +32,7 @@ X <- matrix(0,D,N);
 for(k in 1:K){
   i <- (Z==k);
   M <- sum(i);
-  X[,i] <- sqrtm(Sigma[,,k])%*%matrix(rnorm(D*M),D)+repmat(Mu[,k],1,M);
+  X[,i] <- sqrtm(Sigma[,,k])%*%matrix(rnorm(D*M),D)+kronecker(matrix(1,1,M), Mu[,k]);
 }
 i <- sample(1:N,N,replace=FALSE);
 Z <- Z[i];
