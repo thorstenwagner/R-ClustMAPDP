@@ -151,6 +151,7 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
     }
   }
 
+
  resultList <- list("mu"=mu,"z"=z,"K"=K,"E"=E);
  return(resultList);
 }
