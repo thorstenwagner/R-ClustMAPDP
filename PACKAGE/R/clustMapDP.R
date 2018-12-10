@@ -139,11 +139,17 @@ clustMapDP <- function(X,N0,m0,a0,c0,B0) {
  }
 
  # Compute cluster centroids
- mu <- matrix(NaN,D,K);
- for(k in 1:K){
-   xk <- X[,z==k];
-   mu[,k] <- rowMeans(xk);
- }
+  mu <- matrix(NaN,D,K);
+  for(k in 1:K){
+    if (k %in% unique(z) & length(z[z==k]) > 1){
+      xk <- X[,z==k];
+      mu[,k] <- rowMeans(xk);  
+    } else if (k %in% unique(z) & length(z[z==k]) == 1){
+      mu[,k] <- X[z==k]
+    } else {
+      stop('Something went terribly wrong, check cluster centroids assignation')
+    }
+  }
 
  resultList <- list("mu"=mu,"z"=z,"K"=K,"E"=E);
  return(resultList);
