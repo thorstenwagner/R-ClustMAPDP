@@ -7,7 +7,8 @@ Raykov YP, Boukouvalas A, Baig F, Little MA (2016) What to Do When K-Means Clust
 Use the following command in R:
 ```
 require(devtools)
-install_github("thorstenwagner/R-ClustMAPDP", subdir="PACKAGE")```
+install_github("thorstenwagner/R-ClustMAPDP", subdir="PACKAGE")
+```
 
 ## Example
 For an example how to use this package please see https://github.com/thorstenwagner/R-ClustMAPDP/blob/master/Example/ClustMapExample.R 
